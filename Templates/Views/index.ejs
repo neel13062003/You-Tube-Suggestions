@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <!-- icon permission -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <!-- for dropdown -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"
+        integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT"
+        crossorigin="anonymous"></script>
+    <!-- for dropdown -->
+
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <title>You-Tube Suggestion</title>
+
+
+    <!-- custom-css -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&display=swap');
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            box-shadow: none !important;
+            outline: none !important;
+            border: none !important;
+            color: white;
+        }
+
+        body {
+            background: #000;
+        }
+
+        .navbar-brand {
+            text-decoration: none;
+            font-weight: bolder;
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: .1rem;
+        }
+
+        .navbar-div {
+            background: black;
+        }
+
+        .main-div {
+            background: black;
+        }
+
+        .vid-title {
+
+            border: 2px solid red;
+            max-height: 5rem;
+            overflow: auto;
+        }
+
+        .card-link {
+            background: rgb(255, 36, 36);
+            color: #fff;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+        .card-link:hover {
+            background: red;
+            color: #fff;
+        }
+    </style>
+
+    <!-- custom script -->
+    <script>
+        // handleSearch();
+        $(document).ready(() => {
+            console.log($(".card-parent-div").html() === "");
+            if ($(".card-parent-div").is(":empty")) {
+                $(".card-parent-div")
+                    .html("<p class='text-center text-secondary border border-secondary rounded'>serch video<p>")
+            }
+
+        });
+        function handleSearch() {
+            let query = $("#query").val();
+            body = { query };
+            console.log("in:)");
+            $.post("/search", body, (data, status) => {
+                let videos = data;
+                let allVideos = "";
+                //<p class="card-text overflow-auto">${video.description}</p>
+
+                videos.forEach((video, indx) => {
+                    allVideos +=
+                        `<div class="col-xxl-4 col-lg-6 col-10 my-2 d-flex justify-content-center align-items-center" style="height:30rem;"><div class="card bg-dark px-2 py-2 border border-secondary" style="width: 24rem;height:inherit;">
+                            <div class="img-div">
+                                <img src="${video.thumbnail}" class="card-img-top" alt="...">
+                            </div>
+                            <div class="card-body my-2 bg-secondary rounded">
+                                <p class="card-title fs-6 vid-title">${video.title}</p>
+                            </div>
+                            <div class="card-footer px-0 d-flex justify-content-between align-items-center">
+                                <a href="https://www.youtube.com/watch?v=${video.videoId}" class="card-link btn mx-0">Videos Link</a>
+                                <button class="btn btn-success mx-0">
+                                    Accuracy <span class="badge bg-light text-success"> 88%</span>
+                                </button>
+                            </div>
+                        </div></div>`;
+                });
+                $(".card-parent-div").html(allVideos)
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container-fluid navbar-div">
+
+        <nav class="navbar">
+            <div class="container px-0">
+                <div class="navbar-brand d-flex justify-content-center align-items-center" href="#">
+                    <img src="./Images/youtube-logo-copy.png" alt="" width="70" height="45"
+                        class="d-inline-block align-text-top">
+                    You Tube
+                </div>
+                <div class="d-flex col-md-5 col-12">
+                    <div class="input-group mb-3">
+                        <input type="search" id="query" class="form-control bg-dark border border-secondary text-white"
+                            placeholder="search" aria-label="search" aria-describedby="button-addon2">
+                        <button class=" btn btn-secondary" type="button" id="button-addon2" onclick="handleSearch()"><i
+                                class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container-fluid main-div">
+        <div class="container row mx-auto d-flex justify-content-lg-evenly justify-content-center align-items 
+            card-parent-div"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
